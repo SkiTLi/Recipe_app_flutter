@@ -50,7 +50,7 @@ class _NavBarState extends State<NavBar> {
             isActive: DefaultTabController.of(context).index == 1,
             notActiveIcon: SvgPicture.asset(
               colorFilter:
-                  ColorFilter.mode(ThemeColors.primaryLight, BlendMode.srcIn),
+                  ColorFilter.mode(ThemeColors.primaryAdditional, BlendMode.srcIn),
               'assets/images/cooking.svg',
             ),
             activeIcon: SvgPicture.asset(
@@ -65,7 +65,7 @@ class _NavBarState extends State<NavBar> {
               isActive: DefaultTabController.of(context).index == 2,
               notActiveIcon: SvgPicture.asset(
                 colorFilter:
-                    ColorFilter.mode(ThemeColors.primaryLight, BlendMode.srcIn),
+                    ColorFilter.mode(ThemeColors.primaryAdditional, BlendMode.srcIn),
                 'assets/images/flag.svg',
               ),
               activeIcon: SvgPicture.asset(

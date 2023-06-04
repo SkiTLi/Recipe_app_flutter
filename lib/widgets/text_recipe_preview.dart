@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 
 class TextRecipePreview extends StatelessWidget {
   final String picture;
   final String category;
-  final String description;
+  final String name;
 
   const TextRecipePreview(
       {Key? key,
       required this.picture,
       required this.category,
-      required this.description})
+      required this.name})
       : super(key: key);
 
   @override
@@ -26,7 +25,7 @@ class TextRecipePreview extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: SvgPicture.asset(
+              child: Image.network(
                 picture,
                 fit: BoxFit.cover,
               ),
@@ -45,7 +44,7 @@ class TextRecipePreview extends StatelessWidget {
               // right: 0,
               left: 10,
               child: Text(
-                description,
+                name,
                 style: ThemeFonts.r16,
               ),
             ),

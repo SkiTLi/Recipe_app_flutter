@@ -21,7 +21,7 @@ class FoodCategory extends StatelessWidget {
           width: 35,
           child: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            child: Image.asset(
+            child: Image.network(
               picture,
               fit: BoxFit.contain,
             ),
