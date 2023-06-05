@@ -31,6 +31,22 @@ class TextRecipePreview extends StatelessWidget {
               ),
             ),
             Positioned(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                height: 50,
+                width: 296,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: ThemeColors.dark.withOpacity(0.3),
+                      blurRadius: 12,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
               bottom: 28,
               // right: 0,
               left: 10,

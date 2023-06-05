@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/screens/compose_your_meal_screen.dart';
 import 'package:recipe_app/screens/home_screen.dart';
+import 'package:recipe_app/screens/prepared_recipes_screen.dart';
 import 'package:recipe_app/widgets/nav_bar.dart';
 
 class AppScreen extends StatelessWidget {
@@ -28,7 +29,7 @@ class AppScreen extends StatelessWidget {
               right: 0,
               child: TabBarView(children: [
                 HomeScreen(),
-                ComposeYourMealScreen(),
+                PreparedRecipesScreen(),
                 HomeScreen(),
                 HomeScreen(),
               ]),

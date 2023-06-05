@@ -10,14 +10,18 @@ class CustomTextField extends StatefulWidget {
   final String placeholder;
   final TextStyle style;
   final FormFieldValidator<String>? validator;
+  final GestureTapCallback? onTapField;
+  final VoidCallback? onTapIcon;
 
-  const CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.placeholder,
-      required this.style,
-      this.validator})
-      : super(key: key);
+  const CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.placeholder,
+    required this.style,
+    this.validator,
+    this.onTapField,
+    this.onTapIcon,
+  }) : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -38,6 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           Expanded(
             child: TextFormField(
+              onTap: widget.onTapField,
               focusNode: _focusNode,
               cursorColor: ThemeColors.dark,
               controller: widget.controller,
@@ -56,20 +61,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 errorBorder: _NoInputBorder(),
                 focusedErrorBorder: _NoInputBorder(),
                 disabledBorder: _NoInputBorder(),
-
-
-
               ),
             ),
           ),
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-                color: ThemeColors.primary,
-                borderRadius: BorderRadius.circular(12)),
-            padding: const EdgeInsets.all(15.0),
-            child: SvgPicture.asset('assets/images/searchWhite.svg'),
+          GestureDetector(
+            onTap: widget.onTapIcon,
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  color: ThemeColors.primary,
+                  borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.all(15.0),
+              child: SvgPicture.asset('assets/images/searchWhite.svg'),
+            ),
           ),
           const SizedBox(width: 0),
         ],

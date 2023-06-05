@@ -4,16 +4,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/models/category.dart';
 import 'package:recipe_app/models/recipe.dart';
+import 'package:recipe_app/screens/compose_your_meal_screen.dart';
 import 'package:recipe_app/state/category_list/category_list_cubit.dart';
 import 'package:recipe_app/state/category_list/category_list_state.dart';
 import 'package:recipe_app/state/recipe_list/recipe_list_cubit.dart';
 import 'package:recipe_app/state/recipe_list/recipe_list_state.dart';
 import 'package:recipe_app/widgets/food_category.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
-import 'package:recipe_app/widgets/text_recipe_preview.dart';
+import 'package:recipe_app/widgets/image_recipe_preview.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  void _navigateComposeYourMealScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ComposeYourMealScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +124,8 @@ class HomeScreen extends StatelessWidget {
                           GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             //click work on a empty area
-                            onTap: () {},
+                            onTap: () =>
+                                _navigateComposeYourMealScreen(context),
                             child: Container(
                               width: 148,
                               height: 28,
@@ -200,16 +207,23 @@ class _LoadedCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     // print('---ingredients.length=${ingredients.length}');
     return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: categories.length,
-        itemBuilder: (BuildContext context, int index) {
-          return FoodCategory(
+      scrollDirection: Axis.horizontal,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemCount: categories.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          // onTap: Navigator.of(context).push(
+          //     MaterialPageRoute(builder: (context) => ComposeYourMealScreen())),
+          onTap: () {},
+          child: FoodCategory(
             category: categories[index].name,
             picture: categories[index].picture.toString(),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
 

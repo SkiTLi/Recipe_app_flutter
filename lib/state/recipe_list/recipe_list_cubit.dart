@@ -7,7 +7,8 @@ class RecipeListCubit extends Cubit<RecipeListState> {
   final _recipeProvider = RecipeProvider();
 
   RecipeListCubit() : super(RecipeListLoadingState()) {
-    _loadRecipes(3); // load numberOfRecipes
+    _loadRandomRecipes(3); // load numberOfRecipes
+    // _loadRecipesByCategory('Beef');
   }
 
   void _completeLoading(List<Recipe> recipes) {
@@ -19,7 +20,7 @@ class RecipeListCubit extends Cubit<RecipeListState> {
     emit(RecipeListLoadedState(recipes));
   }
 
-  void _loadRecipes(int numberOfRecipes) async {
+  void _loadRandomRecipes(int numberOfRecipes) async {
     // List<Recipe> recipes = [];
 
     try {
@@ -33,7 +34,24 @@ class RecipeListCubit extends Cubit<RecipeListState> {
       // final recipes = await _recipeProvider.getRecipesByFirstLetter();
       _completeLoading(recipes);
 
-      print('---recipes=$recipes');
+      // print('---recipes=$recipes');
+      emit(RecipeListLoadedState(recipes));
+    } catch (e, stack) {
+      emit(RecipeListErrorState('ErrorAK: $e, $stack'));
+      rethrow;
+    }
+  }
+
+  void _loadRecipesByCategory(String category) async {
+    // List<Recipe> recipes = [];
+
+    try {
+      // final recipes = await _recipeProvider.getRandomRecipe();
+      final recipes = await _recipeProvider.getRecipesByCategory(category);
+      // final recipes = await _recipeProvider.getRecipesByFirstLetter();
+      _completeLoading(recipes);
+
+      // print('---recipes=$recipes');
       emit(RecipeListLoadedState(recipes));
     } catch (e, stack) {
       emit(RecipeListErrorState('ErrorAK: $e, $stack'));

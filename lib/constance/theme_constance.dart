@@ -5,7 +5,7 @@ class ThemeColors {
   static const dark = Color(0xFF000000);
   static const grey = Color(0xFF999999);
   static const greyLight = Color(0xFFF6F6F6);
-
+  static const primaryDark = Color(0xFFEB7E4B);
   static const primary = Color(0xFFfC8B56);
   static const primaryAdditional = Color(0xAAfC8B56);
   static const primaryLight = Color(0xFFFFF4E4);
@@ -25,11 +25,22 @@ class ThemeFonts {
     height: 1.5,
   ); //regular, size9
 
-
   static const rb9 = TextStyle(
     fontSize: 9,
     fontWeight: FontWeight.w400,
     color: ThemeColors.dark,
+    height: 1.5,
+  );
+
+  static const rp10 = TextStyle(
+    fontSize: 10,
+    color: ThemeColors.primary,
+    height: 1.5,
+  );
+
+  static const rg10 = TextStyle(
+    fontSize: 10,
+    color: ThemeColors.grey,
     height: 1.5,
   );
 
@@ -43,6 +54,12 @@ class ThemeFonts {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: ThemeColors.dark,
+    height: 1.5,
+  );
+  static const rp12 = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: ThemeColors.primary,
     height: 1.5,
   );
 
@@ -71,21 +88,25 @@ class ThemeFonts {
     height: 1.5,
   );
 
+  static const r15 = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: ThemeColors.text,
+    height: 1.5,
+  );
+
   static const rp15 = TextStyle(
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: FontWeight.w600,
     color: ThemeColors.primary,
     height: 1.5,
   );
-
 
   static const r16 = TextStyle(
     fontSize: 16,
     color: ThemeColors.text,
     height: 1.5,
   );
-
-
 
   static const r18 = TextStyle(
     fontSize: 18,

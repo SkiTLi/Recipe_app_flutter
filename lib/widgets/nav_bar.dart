@@ -27,7 +27,6 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       color: ThemeColors.scaffold,
       padding: EdgeInsets.all(10),
       child: Row(
@@ -49,8 +48,8 @@ class _NavBarState extends State<NavBar> {
           _NavBarIcon(
             isActive: DefaultTabController.of(context).index == 1,
             notActiveIcon: SvgPicture.asset(
-              colorFilter:
-                  ColorFilter.mode(ThemeColors.primaryAdditional, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                  ThemeColors.primaryAdditional, BlendMode.srcIn),
               'assets/images/cooking.svg',
             ),
             activeIcon: SvgPicture.asset(
@@ -64,8 +63,8 @@ class _NavBarState extends State<NavBar> {
           _NavBarIcon(
               isActive: DefaultTabController.of(context).index == 2,
               notActiveIcon: SvgPicture.asset(
-                colorFilter:
-                    ColorFilter.mode(ThemeColors.primaryAdditional, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                    ThemeColors.primaryAdditional, BlendMode.srcIn),
                 'assets/images/flag.svg',
               ),
               activeIcon: SvgPicture.asset(
@@ -112,7 +111,7 @@ class _NavBarIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.opaque, //for stable click
       child: Column(
         children: [
           SizedBox(

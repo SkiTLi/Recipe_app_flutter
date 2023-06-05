@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/models/ingredient.dart';
+import 'package:recipe_app/screens/search_ingredients_screen.dart';
 import 'package:recipe_app/state/ingredient_list/ingredient_list_cubit.dart';
 import 'package:recipe_app/state/ingredient_list/ingredient_list_state.dart';
 import 'package:recipe_app/widgets/custom_text_field.dart';
@@ -22,115 +23,127 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  void _navigateSearchIngredientsScreen(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => SearchIngredientsScreen()));
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
 
   void _navigateBack(BuildContext context) => Navigator.of(context).pop();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: ThemeColors.scaffold,
-        appBar: MyAppBar(
-          title: 'COMPOSE YOUR MEAL',
-          iconLeft: GestureDetector(
-            // onTap: () => _prt(),
-            onTap: () {},
-            child: SvgPicture.asset('assets/images/arrow.svg'),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Scaffold(
+          backgroundColor: ThemeColors.scaffold,
+          appBar: MyAppBar(
+            title: 'COMPOSE YOUR MEAL',
+            iconLeft: GestureDetector(
+              // onTap: () => _prt(),
+              onTap: () => _navigateBack(context),
+              child: SvgPicture.asset('assets/images/arrow.svg'),
+            ),
+            iconRight: const NumberOfIngredients(),
+            // backgroundColor: Colors.indigo,
           ),
-          iconRight: const NumberOfIngredients(),
-          // backgroundColor: Colors.indigo,
-        ),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    style: ThemeFonts.bb18,
-                    'Add ingredient',
+          body: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      style: ThemeFonts.bb18,
+                      'Add ingredient',
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: CustomTextField(
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: CustomTextField(
+                    onTapField: () => _navigateSearchIngredientsScreen(context),
                     controller: _titleController,
                     placeholder: 'Search ingredient',
-                    style: ThemeFonts.rb14),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Container(
-                  height: 50,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: ThemeColors.primaryLight,
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            color: ThemeColors.primary,
-                            borderRadius: BorderRadius.circular(12)),
-                        padding: const EdgeInsets.all(15.0),
-                        child: SvgPicture.asset('assets/images/barcode.svg'),
-                      ),
-                      const Expanded(
-                        child: Center(
-                            child: Text(
-                          'Scan EAN code',
-                          style: ThemeFonts.rp15,
-                        )),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
                     style: ThemeFonts.rb14,
-                    'Last search',
                   ),
                 ),
-              ),
-              Container(
-                height: 128,
-                //
-                //
-                child: BlocBuilder<IngredientListCubit, IngredientListState>(
-                  builder: (context, state) {
-                    if (state is IngredientListLoadingState) {
-                      return const _Loading();
-                    }
-                    if (state is IngredientListLoadedState) {
-                      return _Loaded(
-                          ingredients:
-                              (state as IngredientListLoadedState).ingredients);
-                    }
-                    if (state is IngredientListErrorState) {
-                      return _Error(
-                        errorText:
-                            (state as IngredientListErrorState).errorText,
-                      );
-                    }
-                    return const Text(
-                      style: ThemeFonts.rp15,
-                      'Epic FAIL',
-                    );
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: ThemeColors.primaryLight,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: ThemeColors.primary,
+                              borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.all(15.0),
+                          child: SvgPicture.asset('assets/images/barcode.svg'),
+                        ),
+                        const Expanded(
+                          child: Center(
+                              child: Text(
+                            'Scan EAN code',
+                            style: ThemeFonts.rp15,
+                          )),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              )
-            ],
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      style: ThemeFonts.rb14,
+                      'Last search',
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 128,
+                  //
+                  //
+                  child: BlocBuilder<IngredientListCubit, IngredientListState>(
+                    builder: (context, state) {
+                      if (state is IngredientListLoadingState) {
+                        return const _Loading();
+                      }
+                      if (state is IngredientListLoadedState) {
+                        return _Loaded(
+                            ingredients: (state as IngredientListLoadedState)
+                                .ingredients);
+                      }
+                      if (state is IngredientListErrorState) {
+                        return _Error(
+                          errorText:
+                              (state as IngredientListErrorState).errorText,
+                        );
+                      }
+                      return const Text(
+                        style: ThemeFonts.rp15,
+                        'Epic FAIL',
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
