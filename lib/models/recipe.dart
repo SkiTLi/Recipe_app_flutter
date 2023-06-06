@@ -1,13 +1,13 @@
 class Recipe {
   final String id;
   final String name;
-  final String category;
+  final String? category;
   final String? picture;
 
   Recipe({
     required this.id,
     required this.name,
-    required this.category,
+    this.category,
     this.picture,
   });
 
@@ -15,7 +15,7 @@ class Recipe {
     return Recipe(
       id: json['idMeal'],
       name: json['strMeal'],
-      category: json['strCategory'],
+      category: json['strCategory'] ?? 'unknown',
       picture: json['strMealThumb'],
     );
   }

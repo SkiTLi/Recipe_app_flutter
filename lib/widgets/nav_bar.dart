@@ -12,7 +12,6 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   void _navigate(int index) {
     DefaultTabController.of(context).index = index;
-    // setState(() {});
   }
 
   @override
@@ -28,48 +27,48 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Container(
       color: ThemeColors.scaffold,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavBarIcon(
               isActive: DefaultTabController.of(context).index == 0,
               notActiveIcon: SvgPicture.asset(
-                colorFilter:
-                    ColorFilter.mode(ThemeColors.primary, BlendMode.modulate),
+                colorFilter: const ColorFilter.mode(
+                    ThemeColors.primary, BlendMode.modulate),
                 'assets/images/home.svg',
               ),
               activeIcon: SvgPicture.asset(
-                colorFilter:
-                    ColorFilter.mode(ThemeColors.primary, BlendMode.modulate),
+                colorFilter: const ColorFilter.mode(
+                    ThemeColors.primary, BlendMode.modulate),
                 'assets/images/homeActive.svg',
               ),
               onTap: () => _navigate(0)),
           _NavBarIcon(
             isActive: DefaultTabController.of(context).index == 1,
             notActiveIcon: SvgPicture.asset(
-              colorFilter: ColorFilter.mode(
+              colorFilter: const ColorFilter.mode(
                   ThemeColors.primaryAdditional, BlendMode.srcIn),
               'assets/images/cooking.svg',
             ),
             activeIcon: SvgPicture.asset(
-              colorFilter:
-                  ColorFilter.mode(ThemeColors.primary, BlendMode.modulate),
+              colorFilter: const ColorFilter.mode(
+                  ThemeColors.primary, BlendMode.modulate),
               'assets/images/hatActive.svg',
             ),
             onTap: () => _navigate(1),
           ),
-          SizedBox(),
+          const SizedBox(),
           _NavBarIcon(
               isActive: DefaultTabController.of(context).index == 2,
               notActiveIcon: SvgPicture.asset(
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                     ThemeColors.primaryAdditional, BlendMode.srcIn),
                 'assets/images/flag.svg',
               ),
               activeIcon: SvgPicture.asset(
-                colorFilter:
-                    ColorFilter.mode(ThemeColors.primary, BlendMode.modulate),
+                colorFilter: const ColorFilter.mode(
+                    ThemeColors.primary, BlendMode.modulate),
                 'assets/images/flagActive.svg',
                 fit: BoxFit.contain,
               ),
@@ -77,13 +76,13 @@ class _NavBarState extends State<NavBar> {
           _NavBarIcon(
               isActive: DefaultTabController.of(context).index == 3,
               notActiveIcon: SvgPicture.asset(
-                colorFilter:
-                    ColorFilter.mode(ThemeColors.primary, BlendMode.modulate),
+                colorFilter: const ColorFilter.mode(
+                    ThemeColors.primary, BlendMode.modulate),
                 'assets/images/settings.svg',
               ),
               activeIcon: SvgPicture.asset(
                 colorFilter:
-                    ColorFilter.mode(ThemeColors.primary, BlendMode.xor),
+                    const ColorFilter.mode(ThemeColors.primary, BlendMode.xor),
                 'assets/images/settings.svg',
               ),
               onTap: () => _navigate(3)),

@@ -12,9 +12,13 @@ class NumberOfIngredients extends StatelessWidget {
       height: 32,
       width: 32,
       decoration: BoxDecoration(
-          color: ThemeColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-      // padding: const EdgeInsets.all(9.0),
-      child: Center(child: Text(number.toString(), style: ThemeFonts.bp14,)),
+          color: ThemeColors.primaryLight,
+          borderRadius: BorderRadius.circular(12)),
+      child: Center(
+          child: Text(
+        number.toString(),
+        style: ThemeFonts.bp14,
+      )),
     );
   }
 }

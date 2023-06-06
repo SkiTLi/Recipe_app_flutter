@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 
 class FoodCategory extends StatelessWidget {
@@ -31,7 +30,6 @@ class FoodCategory extends StatelessWidget {
         Text(
           style: ThemeFonts.rg14,
           category,
-
         ),
       ],
     );

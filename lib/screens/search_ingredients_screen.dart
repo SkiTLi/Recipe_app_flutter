@@ -13,16 +13,17 @@ import 'package:recipe_app/widgets/my_button.dart';
 import 'package:recipe_app/widgets/number_of_ingredients.dart';
 
 class SearchIngredientsScreen extends StatefulWidget {
-  List<Ingredient> addedIngredients = [];
+  final List<Ingredient> addedIngredients = [];
 
   void addIngredient(Ingredient ingredient) {
-    addedIngredients.add(ingredient);
+    addedIngredients.add(ingredient) as Set;
   }
 
   SearchIngredientsScreen({Key? key}) : super(key: key);
 
   @override
-  State<SearchIngredientsScreen> createState() => _SearchIngredientsScreenState();
+  State<SearchIngredientsScreen> createState() =>
+      _SearchIngredientsScreenState();
 }
 
 class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
@@ -33,12 +34,12 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
   void _navigateBack(BuildContext context) => Navigator.of(context).pop();
 
   void _navigateMyIngredientsScreen(BuildContext context) {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => MyIngredientsScreen(addedIngredients: widget.addedIngredients,)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MyIngredientsScreen(
+              addedIngredients: widget.addedIngredients,
+            )));
     FocusScope.of(context).requestFocus(FocusNode());
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,6 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
           appBar: MyAppBar(
             title: 'COMPOSE YOUR MEAL',
             iconLeft: GestureDetector(
-              // onTap: () => _prt(),
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
@@ -95,66 +95,50 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    //
-                    //
-                    child:
-                        BlocBuilder<IngredientListCubit, IngredientListState>(
-                      builder: (context, state) {
-                        if (state is IngredientListLoadingState) {
-                          return const _Loading();
-                        }
-                        if (state is IngredientListLoadedState) {
-                          // return _Loaded(
-                          //     ingredients: (state as IngredientListLoadedState)
-                          //         .ingredients);
-
-                          return ListView.separated(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              // scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) =>
-                                  IngredientHorizontal(
-                                    pictureWidg: Image.network(state
-                                        .ingredients[index].picture
-                                        .toString()),
-                                    name: state.ingredients[index].name,
-                                    boxColor: ThemeColors.primaryLight,
-                                    onTapRightIcon: () => widget.addIngredient(
-                                        state.ingredients[index]),
-                                    // rightIconWidg: Text("Icons.add and jjgjhbjb"),
-                                    // rightIconWidg: SizedBox(
-                                    //     width: 15,
-                                    //     height: 15,
-                                    //     child: SvgPicture.asset('assets/images/rubbish.svg')),
-                                    rightIconWidg: SizedBox(
-                                        width: 15,
-                                        height: 15,
-                                        child: SvgPicture.asset(
-                                            'assets/images/plus.svg')),
+                  child: BlocBuilder<IngredientListCubit, IngredientListState>(
+                    builder: (context, state) {
+                      if (state is IngredientListLoadingState) {
+                        return const _Loading();
+                      }
+                      if (state is IngredientListLoadedState) {
+                        return ListView.separated(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            itemBuilder: (context, index) =>
+                                IngredientHorizontal(
+                                  pictureWidg: Image.network(state
+                                      .ingredients[index].picture
+                                      .toString()),
+                                  name: state.ingredients[index].name,
+                                  boxColor: ThemeColors.primaryLight,
+                                  onTapRightIcon: () => widget
+                                      .addIngredient(state.ingredients[index]),
+                                  rightIconWidg: SizedBox(
+                                      width: 15,
+                                      height: 15,
+                                      child: SvgPicture.asset(
+                                          'assets/images/plus.svg')),
+                                ),
+                            separatorBuilder: (context, index) => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Container(
+                                    height: 1,
+                                    color: ThemeColors.greyLight,
                                   ),
-                              separatorBuilder: (context, index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: Container(
-                                      height: 1,
-                                      color: ThemeColors.greyLight,
-                                    ),
-                                  ),
-                              itemCount: state.ingredients.length);
-                        }
-                        if (state is IngredientListErrorState) {
-                          return _Error(
-                            errorText:
-                                (state as IngredientListErrorState).errorText,
-                          );
-                        }
-                        return const Text(
-                          style: ThemeFonts.rp15,
-                          'Epic FAIL',
+                                ),
+                            itemCount: state.ingredients.length);
+                      }
+                      if (state is IngredientListErrorState) {
+                        return _Error(
+                          errorText:
+                              (state as IngredientListErrorState).errorText,
                         );
-                      },
-                    ),
+                      }
+                      return const Text(
+                        style: ThemeFonts.rp15,
+                        'Epic FAIL',
+                      );
+                    },
                   ),
                 ),
                 MyButton(
@@ -184,46 +168,6 @@ class _Loading extends StatelessWidget {
         color: ThemeColors.primary,
       ),
     );
-  }
-}
-
-class _Loaded extends StatelessWidget {
-  final List<Ingredient> ingredients;
-
-  _Loaded({
-    Key? key,
-    required this.ingredients,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // print('---ingredients.length=${ingredients.length}');
-    return ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        // scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => IngredientHorizontal(
-              pictureWidg: Image.network(ingredients[index].picture.toString()),
-              name: ingredients[index].name,
-              boxColor: ThemeColors.primaryLight,
-              onTapRightIcon: () {},
-              // rightIconWidg: Text("Icons.add and jjgjhbjb"),
-              // rightIconWidg: SizedBox(
-              //     width: 15,
-              //     height: 15,
-              //     child: SvgPicture.asset('assets/images/rubbish.svg')),
-              rightIconWidg: SizedBox(
-                  width: 15,
-                  height: 15,
-                  child: SvgPicture.asset('assets/images/plus.svg')),
-            ),
-        separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                height: 1,
-                color: ThemeColors.greyLight,
-              ),
-            ),
-        itemCount: ingredients.length);
   }
 }
 

@@ -26,8 +26,8 @@ class RecipeProvider {
         [];
   }
 
-  Future<List<Recipe>> getRecipesByFirstLetter() async {
-    final response = await _http.get<Map<String, dynamic>>('/search.php?f=a');
+  Future<List<Recipe>> getRecipesByMainIngredient(String ingredientName) async {
+    final response = await _http.get<Map<String, dynamic>>('/filter.php?i=$ingredientName');
 
     return (response.data?['meals'] as List)
             .map((recipeJson) => Recipe.fromJson(recipeJson))
@@ -41,7 +41,7 @@ class RecipeProvider {
 
     return (response.data?['meals'] as List)
             .map(
-                (recipeJson) => Recipe.fromJson(recipeJson(category: category)))
+                (recipeJson) => Recipe.fromJson(recipeJson))
             .toList() ??
         [];
   }

@@ -7,7 +7,7 @@ import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/my_button.dart';
 
 class MyIngredientsScreen extends StatefulWidget {
-   List<Ingredient> addedIngredients;
+  final List<Ingredient> addedIngredients;
 
   void removeIngredient(Ingredient ingredient) {
     addedIngredients.remove(ingredient);
@@ -37,7 +37,6 @@ class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
           appBar: MyAppBar(
             title: 'COMPOSE YOUR MEAL',
             iconLeft: GestureDetector(
-              // onTap: () => _prt(),
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
@@ -56,47 +55,36 @@ class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
                     ),
                   ),
                 ),
-
                 Expanded(
-                  child: Container(
-                    //
-                    //
-                    child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        // scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => IngredientHorizontal(
-                              pictureWidg: Image.network(widget
-                                  .addedIngredients[index].picture
-                                  .toString()),
-                              name: widget.addedIngredients[index].name,
-                              onTapRightIcon: () => widget.removeIngredient(
-                                  widget.addedIngredients[index]),
-                              // rightIconWidg: Text("Icons.add and jjgjhbjb"),
-                              rightIconWidg: SizedBox(
-                                  width: 15,
-                                  height: 15,
-                                  child: SvgPicture.asset(
-                                      'assets/images/rubbish.svg')),
-                              // rightIconWidg: SizedBox(
-                              //     width: 15,
-                              //     height: 15,
-                              //     child: SvgPicture.asset(
-                              //         'assets/images/plus.svg')),
+                  child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      // scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => IngredientHorizontal(
+                            pictureWidg: Image.network(widget
+                                .addedIngredients[index].picture
+                                .toString()),
+                            name: widget.addedIngredients[index].name,
+                            onTapRightIcon: () => widget.removeIngredient(
+                                widget.addedIngredients[index]),
+                            // rightIconWidg: Text("Icons.add and jjgjhbjb"),
+                            rightIconWidg: SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: SvgPicture.asset(
+                                    'assets/images/rubbish.svg')),
+                          ),
+                      separatorBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Container(
+                              height: 1,
+                              color: ThemeColors.greyLight,
                             ),
-                        separatorBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Container(
-                                height: 1,
-                                color: ThemeColors.greyLight,
-                              ),
-                            ),
-                        itemCount: widget.addedIngredients.length),
-                  ),
+                          ),
+                      itemCount: widget.addedIngredients.length),
                 ),
                 MyButton(
                   iconWidg: SvgPicture.asset(
                     'assets/images/searchWhite.svg',
-                    // fit: BoxFit.scaleDown,
                   ),
                   text: 'Search recipes',
                   onTap: () => print(widget.addedIngredients), //todo
@@ -106,35 +94,6 @@ class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Loading extends StatelessWidget {
-  const _Loading({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: ThemeColors.primary,
-      ),
-    );
-  }
-}
-
-class _Error extends StatelessWidget {
-  final String errorText;
-
-  const _Error({Key? key, required this.errorText}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: ThemeColors.error, borderRadius: BorderRadius.circular(4)),
-      child: Text(errorText),
     );
   }
 }

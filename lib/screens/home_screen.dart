@@ -5,13 +5,15 @@ import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/models/category.dart';
 import 'package:recipe_app/models/recipe.dart';
 import 'package:recipe_app/screens/compose_your_meal_screen.dart';
+import 'package:recipe_app/screens/loading_recipes_screen.dart';
 import 'package:recipe_app/state/category_list/category_list_cubit.dart';
 import 'package:recipe_app/state/category_list/category_list_state.dart';
-import 'package:recipe_app/state/recipe_list/recipe_list_cubit.dart';
-import 'package:recipe_app/state/recipe_list/recipe_list_state.dart';
+import 'package:recipe_app/state/recipe_list/recipe_random_list_cubit.dart';
+import 'package:recipe_app/state/recipe_list/recipe_random_list_state.dart';
 import 'package:recipe_app/widgets/food_category.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/image_recipe_preview.dart';
+import 'package:recipe_app/state/recipe_list/recipe_list_by_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -42,9 +44,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 180,
-              child: BlocBuilder<RecipeListCubit, RecipeListState>(
+              child: BlocBuilder<RecipeRandomListCubit, RecipeListState>(
                 builder: (context, state) {
                   if (state is RecipeListLoadingState) {
                     return const _Loading();
@@ -68,7 +70,7 @@ class HomeScreen extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20),
-              child: Container(
+              child: SizedBox(
                 height: 200,
                 child: BlocBuilder<CategoryListCubit, CategoryListState>(
                   builder: (context, state) {
@@ -153,8 +155,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ])),
     );
-//
-//
   }
 }
 
@@ -188,7 +188,7 @@ class _LoadedRecipes extends StatelessWidget {
         itemBuilder: (context, index) => TextRecipePreview(
               name: recipes[index].name,
               picture: recipes[index].picture.toString(),
-              category: recipes[index].category,
+              category: recipes[index].category.toString(),
             ),
         separatorBuilder: (context, index) => const SizedBox(width: 20),
         itemCount: recipes.length);
@@ -203,6 +203,15 @@ class _LoadedCategories extends StatelessWidget {
     required this.categories,
   }) : super(key: key);
 
+  void _navigateLoadingRecipesScreen(
+      BuildContext context, String nameCategory) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => LoadingRecipesScreen(
+              load: LoadMethod.category,
+              byThisItem: nameCategory,
+            )));
+  }
+
   @override
   Widget build(BuildContext context) {
     // print('---ingredients.length=${ingredients.length}');
@@ -214,9 +223,8 @@ class _LoadedCategories extends StatelessWidget {
       itemCount: categories.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-          // onTap: Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (context) => ComposeYourMealScreen())),
-          onTap: () {},
+          onTap: () =>
+              _navigateLoadingRecipesScreen(context, categories[index].name),
           child: FoodCategory(
             category: categories[index].name,
             picture: categories[index].picture.toString(),

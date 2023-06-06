@@ -30,13 +30,11 @@ class IngredientVertical extends StatelessWidget {
           ),
           Positioned(
             top: 0,
-            // left: 4,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 4),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
                 alignment: Alignment.center,
                 height: 86,
                 width: 74,
-                // width: 60,
                 child: pictureWidg),
           ),
           Positioned(

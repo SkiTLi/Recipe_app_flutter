@@ -3,9 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 
 class CustomTextField extends StatefulWidget {
-  // // final bool Function(int index) onChange;
-  // final CustomCallback onChange;
-
   final TextEditingController controller;
   final String placeholder;
   final TextStyle style;
@@ -49,8 +46,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
               style: widget.style,
               validator: widget.validator,
               decoration: InputDecoration(
-                // filled: true,
-                // fillColor: ThemeColors.greyLight,
                 contentPadding: EdgeInsets.all(15),
                 hintText: widget.placeholder,
                 hintStyle: widget.style

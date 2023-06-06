@@ -12,7 +12,7 @@ import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/number_of_ingredients.dart';
 
 class ComposeYourMealScreen extends StatefulWidget {
-  ComposeYourMealScreen({Key? key}) : super(key: key);
+  const ComposeYourMealScreen({Key? key}) : super(key: key);
 
   @override
   State<ComposeYourMealScreen> createState() => _ComposeYourMealScreenState();
@@ -43,7 +43,6 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
           appBar: MyAppBar(
             title: 'COMPOSE YOUR MEAL',
             iconLeft: GestureDetector(
-              // onTap: () => _prt(),
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
@@ -115,24 +114,19 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 128,
-                  //
-                  //
                   child: BlocBuilder<IngredientListCubit, IngredientListState>(
                     builder: (context, state) {
                       if (state is IngredientListLoadingState) {
                         return const _Loading();
                       }
                       if (state is IngredientListLoadedState) {
-                        return _Loaded(
-                            ingredients: (state as IngredientListLoadedState)
-                                .ingredients);
+                        return _Loaded(ingredients: (state).ingredients);
                       }
                       if (state is IngredientListErrorState) {
                         return _Error(
-                          errorText:
-                              (state as IngredientListErrorState).errorText,
+                          errorText: (state).errorText,
                         );
                       }
                       return const Text(
@@ -178,9 +172,13 @@ class _Loaded extends StatelessWidget {
     return ListView.separated(
         padding: const EdgeInsets.only(left: 20),
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => IngredientVertical(
-              pictureWidg: Image.network(ingredients[index].picture.toString()),
-              name: ingredients[index].name,
+        itemBuilder: (context, index) => GestureDetector(
+              onTap: () {},
+              child: IngredientVertical(
+                pictureWidg:
+                    Image.network(ingredients[index].picture.toString()),
+                name: ingredients[index].name,
+              ),
             ),
         separatorBuilder: (context, index) => const SizedBox(width: 20),
         itemCount: ingredients.length);

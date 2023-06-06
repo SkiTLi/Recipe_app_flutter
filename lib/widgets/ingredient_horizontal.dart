@@ -19,19 +19,16 @@ class IngredientHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // color: ThemeColors.primaryLight,
+    return SizedBox(
         height: 70,
         child: Row(
           children: [
-            Container(
-              // color: ThemeColors.grey,
+            SizedBox(
               width: 70,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-                child: Container(
-                  // color: ThemeColors.greyLight,
+                child: SizedBox(
                   height: 70,
                   child: pictureWidg,
                 ),
@@ -41,7 +38,6 @@ class IngredientHorizontal extends StatelessWidget {
               width: 20,
             ),
             Container(
-              // color: ThemeColors.scaffold,
               height: 60,
               alignment: Alignment.center,
               child: Text(
@@ -52,21 +48,17 @@ class IngredientHorizontal extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                // alignment: Alignment.centerRight,
-                // color: ThemeColors.greyLight,
                 height: 50,
               ),
             ),
             GestureDetector(
               onTap: onTapRightIcon,
               child: Container(
-                // alignment: Alignment.centerRight,
                 decoration: BoxDecoration(
                   color: boxColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 height: 38,
-                // width: 50,
                 child: Padding(
                   padding: const EdgeInsets.all(11),
                   child: Center(child: rightIconWidg),

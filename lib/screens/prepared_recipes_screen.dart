@@ -3,108 +3,123 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/models/recipe.dart';
-import 'package:recipe_app/state/recipe_list/recipe_list_cubit.dart';
-import 'package:recipe_app/state/recipe_list/recipe_list_state.dart';
+import 'package:recipe_app/state/recipe_list/recipe_list_by_cubit.dart';
+import 'package:recipe_app/state/recipe_list/recipe_random_list_state.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/recipe_preview.dart';
 
 class PreparedRecipesScreen extends StatefulWidget {
-  const PreparedRecipesScreen({Key? key}) : super(key: key);
+  final LoadMethod load;
+  final String byThisItem;
+
+  const PreparedRecipesScreen(
+      {Key? key, required this.load, required this.byThisItem})
+      : super(key: key);
 
   @override
   State<PreparedRecipesScreen> createState() => _PreparedRecipesScreenState();
 }
 
 class _PreparedRecipesScreenState extends State<PreparedRecipesScreen> {
-  final _formKey = GlobalKey<FormState>();
+  late final List<Recipe> loadedRecipes;
 
-  void _navigateBack(BuildContext context) => Navigator.of(context).pop();
+  void _navigateBack(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: ThemeColors.scaffold,
-        appBar: MyAppBar(
-          title: 'PREPARED RECIPES',
-          iconLeft: GestureDetector(
-            // onTap: () => _prt(),
-            onTap: () {},
-            child: SvgPicture.asset('assets/images/arrow.svg'),
+    return BlocProvider(
+      create: (_) => RecipeListByCubit(
+        load: widget.load,
+        byThisItem: widget.byThisItem,
+      ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: ThemeColors.scaffold,
+          appBar: MyAppBar(
+            title: 'PREPARED RECIPES',
+            iconLeft: GestureDetector(
+              onTap: () => _navigateBack(context),
+              child: SvgPicture.asset('assets/images/arrow.svg'),
+            ),
+            iconRight: const SizedBox(),
           ),
-          iconRight: const SizedBox(),
-          // backgroundColor: Colors.indigo,
-        ),
-        // body: Container(
-        //   height: double.infinity,
-        //   // width: double.infinity,
-        //   child: ListView(
-        body: SizedBox.expand(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
+          body: BlocBuilder<RecipeListByCubit, RecipeListState>(
+            builder: (context, state) {
+              if (state is RecipeListLoadingState) {
+                return const _Loading();
+              }
+              if (state is RecipeListLoadedState) {
+                return SizedBox.expand(
+                  child: Column(
                     children: [
-                      const Text(
-                        style: ThemeFonts.bb18,
-                        'Results:',
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              const Text(
+                                style: ThemeFonts.bb18,
+                                'Results:',
+                              ),
+                              Text(
+                                style: ThemeFonts.rp15,
+                                '${state.recipes.length} recipes',
+                              ),
+                              const Expanded(child: SizedBox()),
+                              const Text(
+                                style: ThemeFonts.rb12,
+                                'Sort by:',
+                              ),
+                              const Text(
+                                style: ThemeFonts.rp12,
+                                ' popular',
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      const Text(
-                        style: ThemeFonts.rp15,
-                        ' 14 recipes',
-                      ),
-                      Expanded(child: SizedBox()),
-                      const Text(
-                        style: ThemeFonts.rb12,
-                        'Sort by:',
-                      ),
-                      const Text(
-                        style: ThemeFonts.rp12,
-                        ' popular',
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          // child: Expanded(
+                          child: ListView.separated(
+                            itemBuilder: (context, index) => RecipePreview(
+                              name: state.recipes[index].name,
+                              picture: state.recipes[index].picture.toString(),
+                              category:
+                                  state.recipes[index].category.toString(),
+                            ),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              width: 20,
+                              height: 10,
+                            ),
+                            itemCount: state.recipes.length,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  // child: Expanded(
-                  child: Container(
-                    // color: ThemeColors.light,
-                    // height: double.infinity,
-                    // height: 300,
-                    child: BlocBuilder<RecipeListCubit, RecipeListState>(
-                      builder: (context, state) {
-                        if (state is RecipeListLoadingState) {
-                          return const _Loading();
-                        }
-                        if (state is RecipeListLoadedState) {
-                          return _LoadedRecipes(
-                              recipes: (state as RecipeListLoadedState).recipes);
-                        }
-                        if (state is RecipeListErrorState) {
-                          return _Error(
-                            errorText: (state as RecipeListErrorState).errorText,
-                          );
-                        }
-                        return const Text(
-                          style: ThemeFonts.rp15,
-                          'Epic FAIL',
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                );
+              }
+              if (state is RecipeListErrorState) {
+                return _Error(
+                  errorText: (state).errorText,
+                );
+              }
+              return const Text(
+                style: ThemeFonts.rp15,
+                'Epic FAIL',
+              );
+            },
           ),
         ),
       ),
-      // ),
     );
   }
 }
@@ -115,35 +130,9 @@ class _Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(
-        color: ThemeColors.primary,
-      ),
-    );
-  }
-}
-
-class _LoadedRecipes extends StatelessWidget {
-  final List<Recipe> recipes;
-
-  const _LoadedRecipes({
-    Key? key,
-    required this.recipes,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // print('---ingredients.length=${ingredients.length}');
-    return ListView.separated(
-        itemBuilder: (context, index) => RecipePreview(
-              name: recipes[index].name,
-              picture: recipes[index].picture.toString(),
-              category: recipes[index].category,
-            ),
-        separatorBuilder: (context, index) => const SizedBox(
-              width: 20,
-              height: 10,
-            ),
-        itemCount: recipes.length);
+        child: CircularProgressIndicator(
+      color: ThemeColors.primary,
+    ));
   }
 }
 

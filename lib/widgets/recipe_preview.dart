@@ -16,9 +16,8 @@ class RecipePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-
       height: 100,
       child: Row(
         children: [
@@ -27,12 +26,6 @@ class RecipePreview extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             clipBehavior: Clip.hardEdge,
             elevation: 0,
-            // child: Container(
-            //   // height: 100,
-            //   width: 100,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(10),
-            // ),
             child: Image.network(
               picture,
               fit: BoxFit.cover,
@@ -59,7 +52,7 @@ class RecipePreview extends StatelessWidget {
                       height: 10,
                       width: 10,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/hatActive.svg',
                       ),
@@ -69,7 +62,7 @@ class RecipePreview extends StatelessWidget {
                       height: 10,
                       width: 10,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/hatActive.svg',
                       ),
@@ -79,7 +72,7 @@ class RecipePreview extends StatelessWidget {
                       height: 10,
                       width: 10,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/hatActive.svg',
                       ),
@@ -89,7 +82,7 @@ class RecipePreview extends StatelessWidget {
                       height: 10,
                       width: 10,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/hatActive.svg',
                       ),
@@ -99,13 +92,13 @@ class RecipePreview extends StatelessWidget {
                       height: 10,
                       width: 10,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/hatActive.svg',
                       ),
                     ),
                     const SizedBox(width: 3),
-                    Text(
+                    const Text(
                       '9.0',
                       style: ThemeFonts.rp10,
                     ),
@@ -120,7 +113,7 @@ class RecipePreview extends StatelessWidget {
                           height: 9,
                           width: 9,
                           child: SvgPicture.asset(
-                            colorFilter: ColorFilter.mode(
+                            colorFilter: const ColorFilter.mode(
                                 ThemeColors.primary, BlendMode.modulate),
                             'assets/images/starActive.svg',
                           ),
@@ -131,7 +124,7 @@ class RecipePreview extends StatelessWidget {
                               height: 9,
                               width: 9,
                               child: SvgPicture.asset(
-                                colorFilter: ColorFilter.mode(
+                                colorFilter: const ColorFilter.mode(
                                     ThemeColors.primary, BlendMode.modulate),
                                 'assets/images/starActive.svg',
                               ),
@@ -141,7 +134,7 @@ class RecipePreview extends StatelessWidget {
                               height: 9,
                               width: 9,
                               child: SvgPicture.asset(
-                                colorFilter: ColorFilter.mode(
+                                colorFilter: const ColorFilter.mode(
                                     ThemeColors.primary, BlendMode.modulate),
                                 'assets/images/starActive.svg',
                               ),
@@ -151,7 +144,7 @@ class RecipePreview extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 5),
-                    Text(
+                    const Text(
                       'Intermediate',
                       style: ThemeFonts.rg10,
                     ),
@@ -160,13 +153,13 @@ class RecipePreview extends StatelessWidget {
                       height: 16,
                       width: 16,
                       child: SvgPicture.asset(
-                        colorFilter: ColorFilter.mode(
+                        colorFilter: const ColorFilter.mode(
                             ThemeColors.primary, BlendMode.modulate),
                         'assets/images/clock.svg',
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Text(
+                    const Text(
                       '1h 20 m',
                       style: ThemeFonts.rg10,
                     ),
@@ -183,7 +176,7 @@ class RecipePreview extends StatelessWidget {
 
                           alignment: Alignment.center,
                           width: 125,
-                          child: Text(
+                          child: const Text(
                             'Check recipe',
                             style: ThemeFonts.rp12,
                           ),
@@ -193,7 +186,7 @@ class RecipePreview extends StatelessWidget {
                           height: 12,
                           width: 12,
                           child: SvgPicture.asset(
-                            colorFilter: ColorFilter.mode(
+                            colorFilter: const ColorFilter.mode(
                                 ThemeColors.primary, BlendMode.modulate),
                             'assets/images/flagActive.svg',
                           ),
@@ -203,7 +196,7 @@ class RecipePreview extends StatelessWidget {
                           height: 12,
                           width: 12,
                           child: SvgPicture.asset(
-                            colorFilter: ColorFilter.mode(
+                            colorFilter: const ColorFilter.mode(
                                 ThemeColors.primary, BlendMode.modulate),
                             'assets/images/share.svg',
                           ),
@@ -217,7 +210,6 @@ class RecipePreview extends StatelessWidget {
           ),
         ],
       ),
-      // ),
     );
   }
 }

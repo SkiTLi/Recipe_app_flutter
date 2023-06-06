@@ -1,5 +1,3 @@
-
-
 import 'package:recipe_app/models/recipe.dart';
 
 abstract class RecipeListState {}
