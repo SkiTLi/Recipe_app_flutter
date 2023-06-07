@@ -2,52 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
+import 'package:recipe_app/models/cart.dart';
 import 'package:recipe_app/models/ingredient.dart';
 import 'package:recipe_app/screens/my_ingredients_screen.dart';
-import 'package:recipe_app/state/ingredient_list/ingredient_list_cubit.dart';
-import 'package:recipe_app/state/ingredient_list/ingredient_list_state.dart';
+import 'package:recipe_app/state/cart_state.dart';
 import 'package:recipe_app/widgets/custom_text_field.dart';
 import 'package:recipe_app/widgets/ingredient_horizontal.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/my_button.dart';
 import 'package:recipe_app/widgets/number_of_ingredients.dart';
 
-class SearchIngredientsScreen extends StatefulWidget {
-  final List<Ingredient> addedIngredients = [];
+class SearchIngredientsScreen extends StatelessWidget {
+  final List<Ingredient> allIngredients;
 
-  void addIngredient(Ingredient ingredient) {
-    addedIngredients.add(ingredient) as Set;
-  }
-
-  SearchIngredientsScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SearchIngredientsScreen> createState() =>
-      _SearchIngredientsScreenState();
-}
-
-class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
-  final _titleController = TextEditingController();
+  SearchIngredientsScreen({Key? key, required this.allIngredients})
+      : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  // var myCart = Cart([]);
+  List<Ingredient> foundIngredients = [];
+  final _searchIngredientController = TextEditingController();
 
   void _navigateBack(BuildContext context) => Navigator.of(context).pop();
 
   void _navigateMyIngredientsScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MyIngredientsScreen(
-              addedIngredients: widget.addedIngredients,
-            )));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MyIngredientsScreen()));
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  void _addToCart(BuildContext context, Ingredient ingredient) {
+    context.read<CartCubit>().addIngredient(ingredient);
+  }
+
+  Cart findSimilarIngredientsByPartOfName(String partOfName) {
+    final cart = Cart([]);
+    if (partOfName != '') {
+      allIngredients.forEach((item) {
+        if (item.name.toLowerCase().contains(partOfName.toLowerCase())) {
+          cart.addIngredient(item);
+        }
+      });
+    }
+    return cart;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: SafeArea(
         child: Scaffold(
           backgroundColor: ThemeColors.scaffold,
           appBar: MyAppBar(
@@ -56,9 +62,11 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
-            iconRight:
-                NumberOfIngredients(number: widget.addedIngredients.length),
-            // backgroundColor: Colors.indigo,
+            iconRight: BlocBuilder<CartCubit, Cart>(builder: (context, cart) {
+              return NumberOfIngredients(
+                number: cart.ingredients.length,
+              );
+            }),
           ),
           body: SizedBox.expand(
             child: Column(
@@ -78,10 +86,14 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: CustomTextField(
-                    controller: _titleController,
+                    controller: _searchIngredientController,
                     placeholder: 'Search ingredient',
                     style: ThemeFonts.rb14,
-                    onTapIcon: () {}, //todo
+                    onTapIcon: () {
+                      foundIngredients = findSimilarIngredientsByPartOfName(
+                              _searchIngredientController.text)
+                          .ingredients;
+                    },
                   ),
                 ),
                 const Padding(
@@ -95,51 +107,36 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
                   ),
                 ),
                 Expanded(
-                  child: BlocBuilder<IngredientListCubit, IngredientListState>(
-                    builder: (context, state) {
-                      if (state is IngredientListLoadingState) {
-                        return const _Loading();
-                      }
-                      if (state is IngredientListLoadedState) {
-                        return ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            itemBuilder: (context, index) =>
-                                IngredientHorizontal(
-                                  pictureWidg: Image.network(state
-                                      .ingredients[index].picture
-                                      .toString()),
-                                  name: state.ingredients[index].name,
-                                  boxColor: ThemeColors.primaryLight,
-                                  onTapRightIcon: () => widget
-                                      .addIngredient(state.ingredients[index]),
-                                  rightIconWidg: SizedBox(
-                                      width: 15,
-                                      height: 15,
-                                      child: SvgPicture.asset(
-                                          'assets/images/plus.svg')),
-                                ),
-                            separatorBuilder: (context, index) => Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Container(
-                                    height: 1,
-                                    color: ThemeColors.greyLight,
-                                  ),
-                                ),
-                            itemCount: state.ingredients.length);
-                      }
-                      if (state is IngredientListErrorState) {
-                        return _Error(
-                          errorText:
-                              (state as IngredientListErrorState).errorText,
-                        );
-                      }
-                      return const Text(
-                        style: ThemeFonts.rp15,
-                        'Epic FAIL',
-                      );
-                    },
-                  ),
+                  child: BlocBuilder<CartCubit, Cart>(builder: (context, cart) {
+                    return ListView.separated(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemBuilder: (context, index) => IngredientHorizontal(
+                              pictureWidg: Image.network(
+                                  foundIngredients[index].picture.toString()),
+                              name: foundIngredients[index].name,
+                              boxColor: ThemeColors.greyLight,
+                              onTapRightIcon: () {
+                                if (!cart.ingredients
+                                    .contains(foundIngredients[index])) {
+                                  // cart.addIngredient(foundIngredients[index]);
+                                  _addToCart(context, foundIngredients[index]);
+                                }
+                              },
+                              rightIconWidg: SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child:
+                                      SvgPicture.asset('assets/images/plus.svg')),
+                            ),
+                        separatorBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                height: 1,
+                                color: ThemeColors.greyLight,
+                              ),
+                            ),
+                        itemCount: foundIngredients.length);
+                  }),
                 ),
                 MyButton(
                   iconWidg: SvgPicture.asset(
@@ -154,35 +151,6 @@ class _SearchIngredientsScreenState extends State<SearchIngredientsScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Loading extends StatelessWidget {
-  const _Loading({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: ThemeColors.primary,
-      ),
-    );
-  }
-}
-
-class _Error extends StatelessWidget {
-  final String errorText;
-
-  const _Error({Key? key, required this.errorText}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: ThemeColors.error, borderRadius: BorderRadius.circular(4)),
-      child: Text(errorText),
     );
   }
 }

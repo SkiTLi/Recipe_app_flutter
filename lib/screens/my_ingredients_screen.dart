@@ -1,32 +1,31 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
+import 'package:recipe_app/models/cart.dart';
 import 'package:recipe_app/models/ingredient.dart';
+import 'package:recipe_app/state/cart_state.dart';
 import 'package:recipe_app/widgets/ingredient_horizontal.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/my_button.dart';
+import 'package:recipe_app/widgets/number_of_ingredients.dart';
+// import 'package:provider/provider.dart';
 
-class MyIngredientsScreen extends StatefulWidget {
-  final List<Ingredient> addedIngredients;
+class MyIngredientsScreen extends StatelessWidget {
+  MyIngredientsScreen({Key? key}) : super(key: key);
 
-  void removeIngredient(Ingredient ingredient) {
-    addedIngredients.remove(ingredient);
-  }
-
-  MyIngredientsScreen({Key? key, required this.addedIngredients})
-      : super(key: key);
-
-  @override
-  State<MyIngredientsScreen> createState() => _MyIngredientsScreenState();
-}
-
-class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void _navigateBack(BuildContext context) => Navigator.of(context).pop();
 
+  void _removeFromCart(BuildContext context, Ingredient ingredient) {
+    context.read<CartCubit>().removeIngredient(ingredient);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // final cart = context.watch<CartCubit>().state;
     return SafeArea(
       child: GestureDetector(
         onTap: () {
@@ -40,9 +39,15 @@ class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
+            // iconRight: BlocBuilder<CartCubit, Cart>(builder: (context, cart1) {
+            //   return NumberOfIngredients(
+            //     number: cart1.ingredients.length,
+            //   );
+            // }),
           ),
           body: SizedBox.expand(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               key: _formKey,
               children: [
                 const Padding(
@@ -56,38 +61,67 @@ class _MyIngredientsScreenState extends State<MyIngredientsScreen> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.separated(
+                  child: BlocBuilder<CartCubit, Cart>(builder: (context, cart) {
+                    return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      // scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => IngredientHorizontal(
-                            pictureWidg: Image.network(widget
-                                .addedIngredients[index].picture
-                                .toString()),
-                            name: widget.addedIngredients[index].name,
-                            onTapRightIcon: () => widget.removeIngredient(
-                                widget.addedIngredients[index]),
-                            // rightIconWidg: Text("Icons.add and jjgjhbjb"),
-                            rightIconWidg: SizedBox(
-                                width: 15,
-                                height: 15,
-                                child: SvgPicture.asset(
-                                    'assets/images/rubbish.svg')),
-                          ),
-                      separatorBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              height: 1,
-                              color: ThemeColors.greyLight,
+                      itemBuilder: (context, index) {
+                        if (index == cart.ingredients.length) {
+                          return GestureDetector(
+                            onTap: () => _navigateBack(context),
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(10),
+                              dashPattern: const [5, 5],
+                              color: ThemeColors.primary,
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 48,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: ThemeColors.scaffold,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: const Center(
+                                    child: Text(
+                                  'Add ingredient',
+                                  style: ThemeFonts.rp15,
+                                )),
+                              ),
                             ),
-                          ),
-                      itemCount: widget.addedIngredients.length),
+                          );
+                        }
+
+                        return IngredientHorizontal(
+                          pictureWidg: Image.network(
+                              cart.ingredients[index].picture.toString()),
+                          name: cart.ingredients[index].name,
+                          onTapRightIcon: () {
+                            _removeFromCart(context,
+                                cart.ingredients[index]); //not work stable
+                          },
+                          rightIconWidg: SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: SvgPicture.asset(
+                                  'assets/images/rubbish.svg')),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          height: 1,
+                          color: ThemeColors.greyLight,
+                        ),
+                      ),
+                      itemCount: cart.ingredients.length + 1,
+                    );
+                  }),
                 ),
                 MyButton(
                   iconWidg: SvgPicture.asset(
                     'assets/images/searchWhite.svg',
                   ),
                   text: 'Search recipes',
-                  onTap: () => print(widget.addedIngredients), //todo
+                  onTap: () {},
                 ),
               ],
             ),

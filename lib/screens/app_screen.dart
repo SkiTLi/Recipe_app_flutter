@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
+import 'package:recipe_app/screens/compose_your_meal_screen.dart';
 import 'package:recipe_app/screens/home_screen.dart';
 import 'package:recipe_app/widgets/nav_bar.dart';
 
 class AppScreen extends StatelessWidget {
   const AppScreen({Key? key}) : super(key: key);
+
+  void _navigateSearchIngredientsScreen(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const ComposeYourMealScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,7 @@ class AppScreen extends StatelessWidget {
               bottom: 21,
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque, //click work on a empty area
-                onTap: () {},
+                onTap: () => _navigateSearchIngredientsScreen(context),
                 child: Container(
                   width: 58,
                   height: 58,

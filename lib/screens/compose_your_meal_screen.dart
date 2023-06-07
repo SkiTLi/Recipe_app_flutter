@@ -9,7 +9,6 @@ import 'package:recipe_app/state/ingredient_list/ingredient_list_state.dart';
 import 'package:recipe_app/widgets/custom_text_field.dart';
 import 'package:recipe_app/widgets/ingredient_vertical.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
-import 'package:recipe_app/widgets/number_of_ingredients.dart';
 
 class ComposeYourMealScreen extends StatefulWidget {
   const ComposeYourMealScreen({Key? key}) : super(key: key);
@@ -21,11 +20,15 @@ class ComposeYourMealScreen extends StatefulWidget {
 class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
   final _titleController = TextEditingController();
 
+  List<Ingredient> allIngredients = [];
+
   final _formKey = GlobalKey<FormState>();
 
   void _navigateSearchIngredientsScreen(BuildContext context) {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => SearchIngredientsScreen()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SearchIngredientsScreen(
+              allIngredients: allIngredients,
+            )));
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -46,7 +49,7 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
-            iconRight: const NumberOfIngredients(),
+            // iconRight: const NumberOfIngredients(),
             // backgroundColor: Colors.indigo,
           ),
           body: Form(
@@ -104,8 +107,18 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Container(
+                    height: 1,
+                    color: ThemeColors.greyLight,
+                  ),
+                ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -122,6 +135,8 @@ class _ComposeYourMealScreenState extends State<ComposeYourMealScreen> {
                         return const _Loading();
                       }
                       if (state is IngredientListLoadedState) {
+                        allIngredients = (state).ingredients;
+
                         return _Loaded(ingredients: (state).ingredients);
                       }
                       if (state is IngredientListErrorState) {
