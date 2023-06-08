@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_app/screens/home_screen.dart';
 import 'package:recipe_app/state/cart_state.dart';
 import 'package:recipe_app/state/category_list/category_list_cubit.dart';
 import 'screens/app_screen.dart';
@@ -21,7 +22,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(fontFamily: 'Nunito'),
         // debugShowCheckedModeBanner: false, //true - with debugMode, or false - without
-        home: AppScreen(),
+        home: AppScreen( screen: HomeScreen(),),
       ),
     );
   }

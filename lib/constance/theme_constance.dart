@@ -121,8 +121,6 @@ class ThemeFonts {
     height: 1.5,
   );
 
-
-
   static const r20 = TextStyle(
     fontSize: 20,
     color: ThemeColors.text,
@@ -136,8 +134,8 @@ class ThemeFonts {
     height: 1.5,
   );
 
-  static const rp44 = TextStyle(
-    fontSize: 44,
+  static const rp30 = TextStyle(
+    fontSize: 30,
     fontWeight: FontWeight.w800,
     color: ThemeColors.primary,
     height: 1.5,

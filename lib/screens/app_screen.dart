@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/screens/compose_your_meal_screen.dart';
-import 'package:recipe_app/screens/home_screen.dart';
 import 'package:recipe_app/widgets/nav_bar.dart';
 
 class AppScreen extends StatelessWidget {
-  const AppScreen({Key? key}) : super(key: key);
+  final Widget screen;
+
+  const AppScreen({Key? key, required this.screen}) : super(key: key);
 
   void _navigateSearchIngredientsScreen(BuildContext context) {
     Navigator.of(context).push(
@@ -22,19 +23,19 @@ class AppScreen extends StatelessWidget {
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            const Positioned(
-              child: HomeScreen(),
+            Positioned(
+              child: screen,
             ),
-            const Positioned(
+            Positioned(
               top: 0,
               bottom: 100,
               //100 pixels
               left: 0,
               right: 0,
               child: TabBarView(children: [
-                HomeScreen(),
-                //  PreparedRecipesScreen(),
+                screen,
                 // HomeScreen(),
+                // PreparedRecipesScreen(),
                 // LoadingRecipesScreen(),
               ]),
             ),

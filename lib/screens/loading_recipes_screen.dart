@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
+import 'package:recipe_app/screens/app_screen.dart';
 import 'package:recipe_app/screens/prepared_recipes_screen.dart';
 import 'package:recipe_app/state/recipe_list/recipe_list_by_cubit.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
@@ -19,8 +20,9 @@ class LoadingRecipesScreen extends StatelessWidget {
   void _navigateLoadedRecipesScreen(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PreparedRecipesScreen(load: load, byThisItem: byThisItem)));
+        builder: (context) => AppScreen(
+            screen:
+                PreparedRecipesScreen(load: load, byThisItem: byThisItem))));
   }
 
   @override

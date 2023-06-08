@@ -206,7 +206,8 @@ class _LoadedCategories extends StatelessWidget {
   void _navigateLoadingRecipesScreen(
       BuildContext context, String nameCategory) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => LoadingRecipesScreen(
+        builder: (context) =>
+            LoadingRecipesScreen(
               load: LoadMethod.category,
               byThisItem: nameCategory,
             )));

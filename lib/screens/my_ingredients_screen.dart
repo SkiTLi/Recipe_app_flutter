@@ -5,22 +5,63 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:recipe_app/constance/theme_constance.dart';
 import 'package:recipe_app/models/cart.dart';
 import 'package:recipe_app/models/ingredient.dart';
+import 'package:recipe_app/screens/loading_recipes_screen.dart';
 import 'package:recipe_app/state/cart_state.dart';
+import 'package:recipe_app/state/recipe_list/recipe_list_by_cubit.dart';
 import 'package:recipe_app/widgets/ingredient_horizontal.dart';
 import 'package:recipe_app/widgets/my_app_bar.dart';
 import 'package:recipe_app/widgets/my_button.dart';
-import 'package:recipe_app/widgets/number_of_ingredients.dart';
-// import 'package:provider/provider.dart';
 
 class MyIngredientsScreen extends StatelessWidget {
   MyIngredientsScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
-  void _navigateBack(BuildContext context) => Navigator.of(context).pop();
-
   void _removeFromCart(BuildContext context, Ingredient ingredient) {
     context.read<CartCubit>().removeIngredient(ingredient);
+  }
+
+  void _navigateBack(BuildContext context) => Navigator.of(context).pop();
+
+  void _navigateLoadingRecipesScreen(
+      BuildContext context, String mainIngredient) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => LoadingRecipesScreen(
+              load: LoadMethod.ingredient,
+              byThisItem: mainIngredient,
+            )));
+  }
+
+  void showMyDialog({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            textAlign: TextAlign.center,
+            title,
+            style: ThemeFonts.rp24,
+          ),
+          content: Text(
+            textAlign: TextAlign.center,
+            message,
+            style: ThemeFonts.bb18,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok', style: ThemeFonts.rp24),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -39,11 +80,6 @@ class MyIngredientsScreen extends StatelessWidget {
               onTap: () => _navigateBack(context),
               child: SvgPicture.asset('assets/images/arrow.svg'),
             ),
-            // iconRight: BlocBuilder<CartCubit, Cart>(builder: (context, cart1) {
-            //   return NumberOfIngredients(
-            //     number: cart1.ingredients.length,
-            //   );
-            // }),
           ),
           body: SizedBox.expand(
             child: Column(
@@ -116,13 +152,27 @@ class MyIngredientsScreen extends StatelessWidget {
                     );
                   }),
                 ),
-                MyButton(
-                  iconWidg: SvgPicture.asset(
-                    'assets/images/searchWhite.svg',
-                  ),
-                  text: 'Search recipes',
-                  onTap: () {},
-                ),
+                BlocBuilder<CartCubit, Cart>(builder: (context, cart1) {
+                  return MyButton(
+                      iconWidg: SvgPicture.asset(
+                        'assets/images/searchWhite.svg',
+                      ),
+                      text: 'Search recipes',
+                      onTap: () {
+                        if (cart1.ingredients.isNotEmpty) {
+                          _navigateLoadingRecipesScreen(
+                              context, cart1.ingredients.first.name);
+                        } else {
+                          showMyDialog(
+                            context: context,
+                            title:
+                                'Sorry, I don\'t know what you\'d like to eat',
+                            message: 'You haven\'t selected any ingredient.'
+                                '\n\nPlease add an ingredient :)',
+                          );
+                        }
+                      });
+                }),
               ],
             ),
           ),
